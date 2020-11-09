@@ -12,6 +12,15 @@
       <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>
     <div id="app"></div>
+    <script src="../node_modules/@vue/reactivity/dist/reactivity.global.js"></script>
     <!-- built files will be auto injected -->
+    <script>
+      const {reactive,effect,ref,computed,toRefs} = VueReactivity
+      const state = reactive({name:'zzb',b:{a:10}})
+      console.log(state.b)
+      effect(()=>{
+        app.innerHTML = state.name
+      })
+    </script>
   </body>
 </html>
