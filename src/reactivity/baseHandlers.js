@@ -1,9 +1,8 @@
 
 
-import { isArray } from 'core-js/fn/array'
-import { isInteger } from 'core-js/fn/number'
-import {isSymbol,isObject, hasOwn, hasChanged} from '../shared/index'
+import {isSymbol,isObject, hasOwn, hasChanged,isArray,isInteger} from '../shared/index'
 import { reactive } from './reactive'
+import {track, trigger} from './effect'
 function createGetter(){
     return function get(target,key,receiver){
         const res = Reflect.get(target,key,receiver)
@@ -14,6 +13,7 @@ function createGetter(){
         }
 
         //依赖收集
+        track(target,key)
         if(isObject(res)){  //取值是对象进行代理
             return reactive(res)
         }
@@ -38,10 +38,10 @@ function createSetter(){
 
         // 新增
         if(!hadKey){
-        
+            trigger(target,'add',key,value)
         // 修改   
         }else if(hasChanged(value,oldValue)){
-
+            trigger(target,'set',key,value,oldValue)
         }
 
 
